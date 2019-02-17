@@ -91,7 +91,7 @@ int main(int argc, char** argv)
 	wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
 	wcex.hbrBackground	= (HBRUSH)WHITE_BRUSH;
 	wcex.lpszMenuName	= 0;
-	wcex.lpszClassName	= "Draw2DWindow";
+	wcex.lpszClassName	= TEXT("Draw2DWindow");
 	wcex.hIconSm		= 0;
 	if (RegisterClassEx(&wcex) == 0)
 	{
@@ -119,7 +119,7 @@ int main(int argc, char** argv)
 	appExit();
 
 	// unregister the window class
-	UnregisterClass("Draw2DWindow", GetModuleHandle(NULL));
+	UnregisterClass(TEXT("Draw2DWindow"), GetModuleHandle(NULL));
 
 	return 0;
 }
@@ -161,7 +161,7 @@ HWND createDraw2DWindow()
 	if(y > screen_height - wnd_height) y = screen_height - wnd_height;	
 
 	// 创建窗口
-	hwnd = CreateWindowEx(ex_style, "Draw2DWindow", "Block",style, x,y, wnd_width,wnd_height,NULL,NULL,GetModuleHandle(NULL), NULL);
+	hwnd = CreateWindowEx(ex_style, TEXT("Draw2DWindow"), TEXT("操作（左、右、下、空格、F1）"),style, x,y, wnd_width,wnd_height,NULL,NULL,GetModuleHandle(NULL), NULL);
 	ShowWindow(hwnd, SW_SHOW);
 	UpdateWindow(hwnd);
 	SetForegroundWindow(hwnd);
@@ -209,8 +209,10 @@ long CALLBACK wndProc(HWND hWnd, unsigned int message, WPARAM wParam, LPARAM lPa
 				break;
 			case VK_F1:
 				{
-					if(g_block != NULL) { free(g_block); g_block = NULL; }
-					g_block = CreateNewBlock();
+					if(g_background)
+					{
+						memset(g_background, 0, g_background_width * g_background_height * sizeof(int));
+					}
 				}
 				break;
 			case VK_SPACE:
